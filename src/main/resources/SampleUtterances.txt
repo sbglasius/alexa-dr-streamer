@@ -1,0 +1,17 @@
+SelectRegionIntent region {subprogram}
+SelectRegionIntent play region {subprogram}
+SelectRegionIntent start region {subprogram}
+SelectProgramIntent P {program}
+SelectProgramIntent Program {program}
+SelectProgramIntent play {program}
+SelectProgramIntent play P {program}
+SelectProgramIntent play Program {program}
+SelectProgramIntent start P {program}
+SelectProgramIntent start Program {program}
+SelectProgramIntent start {program}
+SelectNewsIntent news
+SelectNewsIntent play news
+SelectNewsIntent start news
+AMAZON.HelpIntent help
+AMAZON.StopIntent stop
+AMAZON.CancelIntent cancel

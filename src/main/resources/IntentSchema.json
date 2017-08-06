@@ -1,0 +1,40 @@
+{
+    "intents": [
+        {
+            "slots": [
+                {
+                    "name": "program",
+                    "type": "AMAZON.NUMBER"
+                }
+            ],
+            "intent": "SelectProgramIntent"
+        },
+        {
+            "slots": [
+                {
+                    "name": "region",
+                    "type": "REGION"
+                }
+            ],
+            "intent": "SelectRegionIntent"
+        },
+        {
+            "intent": "SelectNewsIntent"
+        },
+        {
+            "intent": "AMAZON.HelpIntent"
+        },
+        {
+            "intent": "AMAZON.StopIntent"
+        },
+        {
+            "intent": "AMAZON.CancelIntent"
+        },
+        {
+            "intent": "AMAZON.ResumeIntent"
+        },
+        {
+            "intent": "AMAZON.PauseIntent"
+        }
+    ]
+}

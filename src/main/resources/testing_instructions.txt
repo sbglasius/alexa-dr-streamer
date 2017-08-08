@@ -1,0 +1,7 @@
+This skill will start streaming Denmark's Radio live-streams found on this page: http://www.dr.dk/hjaelp/digtal-radio/direkte-links-til-dr-radio-paa-nettet (these streams are in the public domain, as Denmark's Radio is a public funded radio station)
+
+For the programs P1-P9 (except P4) simply utter Program 1 through Program 9. If uttering Program 4 the app will ask you to say ´region´ plus the region name (any of Bornholm, Esbjerg, Funen, Copenhagen, Midt West. North, North Jutland, Northern Jutland, Zealand, South, Triangle Area, Tri Area, Tri City, East, East Jutland, Eastern Jutland). The skill will narrow it down to the correct region.
+To get the news channel, utter 'news'.
+
+When pausing and resuming the playback, it will not resume from the time it paused, but will resume the live stream where it is at. This is the nature of the live stream.
+

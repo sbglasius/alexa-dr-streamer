@@ -22,8 +22,12 @@ import groovy.util.logging.Slf4j
 @Slf4j
 class RadioSpeechlet implements Speechlet {
 
+    String title = "Denmark's Radio Streamer Unoficcial Skill"
 
-    String title = "Denmarks Radio Unoficcial Skill"
+    public static final int DEFAULT_STREAM_OFFSET = 29
+    public static final String PROGRAM_NAME = 'programName'
+    public static final String STREAM_URL = 'streamUrl'
+    public static final String STREAM_OFFSET = 'streamOffset'
 
     private final static Map P4 = [
             'bornholm'        : 'bornholm',
@@ -84,13 +88,15 @@ class RadioSpeechlet implements Speechlet {
             case "HelpIntent":
                 getHelpResponse()
                 break
-            case "AMAZON.StopIntent":
             case "AMAZON.CancelIntent":
-                stopOrCancelPlayback()
+                cancelPlayback()
                 break
             case "AMAZON.PauseIntent":
+            case "AMAZON.StopIntent":
+                pausePlayback(request, session, context)
+                break
             case "AMAZON.ResumeIntent":
-                stopOrCancelPlayback()
+                resumePlayback(request, session, context)
                 break
             default:
                 getWelcomeResponse(session)
@@ -110,17 +116,18 @@ class RadioSpeechlet implements Speechlet {
 
     @Override
     SpeechletResponse onPlaybackStarted(PlaybackStartedRequest playbackStartedRequest, Context context) throws SpeechletException {
+        log.debug("Playback started")
         return null
     }
 
     @Override
     SpeechletResponse onPlaybackFinished(PlaybackFinishedRequest playbackFinishedRequest, Context context) throws SpeechletException {
+        log.debug("Playback started")
         return null
     }
 
     @Override
     void onPlaybackStopped(PlaybackStoppedRequest playbackStoppedRequest, Context context) throws SpeechletException {
-
     }
 
     @Override
@@ -148,11 +155,6 @@ class RadioSpeechlet implements Speechlet {
         askResponse(speechText, speechText)
     }
 
-    SpeechletResponse pauseResumeNotImplemented(Session session, IntentRequest intentRequest, Context context) {
-        String toSay = "Pause and resume is not implemented yet"
-        tellResponse(toSay, toSay)
-    }
-
     private SpeechletResponse playProgramResponse(IntentRequest request, Session session, Context context) {
         Integer program = request.intent.getSlot("program").value?.toInteger()
         log.debug("Got slot 'program' with value ${program}")
@@ -164,7 +166,6 @@ class RadioSpeechlet implements Speechlet {
 
         String propertyName = "p$program"
         if (propertyName == 'p4') {
-            session.setAttribute('channel', 'p4')
             def p4response = "To listen to a P 4 regional station, say 'region', followed by the region name"
             return askResponse(p4response, p4response)
         }
@@ -172,8 +173,11 @@ class RadioSpeechlet implements Speechlet {
         String programName = stationList.getProperty("${propertyName}.name")
         String streamUrl = stationList.getProperty("${propertyName}.url")
 
+        session.setAttribute(PROGRAM_NAME, programName)
+        session.setAttribute(STREAM_URL, streamUrl)
 
-        return tellPlayStream(request, streamUrl, programName)
+        String speechText = "Now starting '${programName}'"
+        return tellPlayStream(request, streamUrl, speechText)
     }
 
     private SpeechletResponse playRegionResponse(IntentRequest request, Session session, Context context) {
@@ -189,24 +193,81 @@ class RadioSpeechlet implements Speechlet {
         String programName = stationList.getProperty("${propertyName}.name")
         String streamUrl = stationList.getProperty("${propertyName}.url")
 
-        return tellPlayStream(request, streamUrl, programName)
+        session.setAttribute(PROGRAM_NAME, programName)
+        session.setAttribute(STREAM_URL, streamUrl)
+
+        String speechText = "Now starting '${programName}'"
+        return tellPlayStream(request, streamUrl, speechText)
     }
 
     private SpeechletResponse playNewsResponse(IntentRequest request, Session session, Context context) {
         log.debug("Playing news and sports loop")
         String programName = stationList.getProperty("news.name")
         String streamUrl = stationList.getProperty("news.url")
-        return tellPlayStream(request, streamUrl, programName, 0)
+
+        session.setAttribute(PROGRAM_NAME, programName)
+        session.setAttribute(STREAM_URL, streamUrl)
+        session.setAttribute(STREAM_OFFSET, 0)
+
+        String speechText = "Now starting '${programName}'"
+        return tellPlayStream(request, streamUrl, speechText, 0)
     }
 
-    private SpeechletResponse tellPlayStream(IntentRequest request, String streamUrl, String programName, int offset = 29) {
+    private SpeechletResponse pausePlayback(IntentRequest request, Session session, Context context) {
+        log.debug("Cancel intent")
+        String speechText = "Pausing Denmark's Radio. Say 'resume' to continue ${session.getAttribute(PROGRAM_NAME)}"
+        tellCancelStream(speechText)
+
+    }
+
+    private SpeechletResponse resumePlayback(IntentRequest request, Session session, Context context) {
+        String programName = session.getAttribute(PROGRAM_NAME)
+        if(!programName) {
+            String noProgramName = "Could not continue playback"
+            return tellResponse(noProgramName)
+        }
+        log.debug("Resuming playback of $programName")
+        String streamUrl = session.getAttribute(STREAM_URL)
+        Integer streamOffset = session.getAttribute(STREAM_OFFSET) as Integer
+        String speechText = "Resuming Denmark's Radio '${programName}'"
+        return tellPlayStream(request, streamUrl, speechText, streamOffset ?: DEFAULT_STREAM_OFFSET)
+    }
+
+
+    private SpeechletResponse cancelPlayback() {
+        log.debug("Cancel intent")
+        String speechText = "Stopping Denmark's Radio. GoodBye."
+        tellCancelStream(speechText)
+    }
+
+    private SpeechletResponse tellCancelStream(String speechText) {
+        AudioDirectiveStop audioDirectiveClearQueue = new AudioDirectiveStop()
+        //audioDirectiveClearQueue.clearBehaviour = "CLEAR_ALL"
+        // Create the Simple card content.
+        SimpleCard card = new SimpleCard()
+        card.setTitle(title)
+        card.setContent(speechText)
+
+        // Create the plain text output.
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech()
+        speech.setText(speechText)
+
+        // Create reprompt
+        Reprompt reprompt = new Reprompt()
+        reprompt.setOutputSpeech(speech)
+
+
+        SpeechletResponse.newTellResponse(speech, card, [audioDirectiveClearQueue] as List<AudioDirective>)
+    }
+
+
+    private SpeechletResponse tellPlayStream(IntentRequest request, String streamUrl, String speechText, int offset = DEFAULT_STREAM_OFFSET) {
         log.debug("Trying to start ${streamUrl}")
         if (!streamUrl) {
             String noStation = "Did not find a station, please start over."
-            return tellResponse(noStation, noStation)
+            return tellResponse(noStation)
         }
 
-        String speechText = "Now starting '${programName}'"
         SimpleCard card = new SimpleCard()
         card.setTitle(title)
         card.setContent(speechText)
@@ -243,7 +304,10 @@ class RadioSpeechlet implements Speechlet {
     }
 
 
-    private SpeechletResponse tellResponse(String cardText, String speechText) {
+    private SpeechletResponse tellResponse(String cardText, String speechText = null) {
+        if(!speechText) {
+            speechText = cardText
+        }
         // Create the Simple card content.
         SimpleCard card = new SimpleCard()
         card.setTitle(title)
@@ -271,27 +335,6 @@ class RadioSpeechlet implements Speechlet {
         askResponse(speechText, speechText)
     }
 
-    private SpeechletResponse stopOrCancelPlayback() {
-        AudioDirectiveStop audioDirectiveClearQueue = new AudioDirectiveStop()
-        //audioDirectiveClearQueue.clearBehaviour = "CLEAR_ALL"
-        String speechText = "Stopping Denmark's Radio. GoodBye."
-        // Create the Simple card content.
-        SimpleCard card = new SimpleCard()
-        card.setTitle(title)
-        card.setContent(speechText)
-
-        // Create the plain text output.
-        PlainTextOutputSpeech speech = new PlainTextOutputSpeech()
-        speech.setText(speechText)
-
-        // Create reprompt
-        Reprompt reprompt = new Reprompt()
-        reprompt.setOutputSpeech(speech)
-
-        log.debug("Stopping intent")
-
-        SpeechletResponse.newTellResponse(speech, card, [audioDirectiveClearQueue] as List<AudioDirective>)
-    }
 
     private void initializeComponents(Session session) {
         // initialize any components here like set up a dynamodb connection

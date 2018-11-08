@@ -1,40 +1,165 @@
 {
-    "intents": [
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "denmark's radio",
+      "intents": [
         {
-            "slots": [
-                {
-                    "name": "program",
-                    "type": "AMAZON.NUMBER"
-                }
-            ],
-            "intent": "SelectProgramIntent"
+          "name": "SelectProgramIntent",
+          "slots": [
+            {
+              "name": "program",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "P {program}",
+            "Program {program}",
+            "play {program}",
+            "play P {program}",
+            "play Program {program}",
+            "start P {program}",
+            "start Program {program}",
+            "start {program}"
+          ]
         },
         {
-            "slots": [
-                {
-                    "name": "region",
-                    "type": "REGION"
-                }
-            ],
-            "intent": "SelectRegionIntent"
+          "name": "SelectRegionIntent",
+          "slots": [
+            {
+              "name": "region",
+              "type": "REGION"
+            }
+          ],
+          "samples": [
+            "region {region}",
+            "play region {region}",
+            "start region {region}",
+            "P four region {region}"
+          ]
         },
         {
-            "intent": "SelectNewsIntent"
+          "name": "SelectNewsIntent",
+          "slots": [],
+          "samples": [
+            "news",
+            "play news",
+            "start news"
+          ]
         },
         {
-            "intent": "AMAZON.HelpIntent"
+          "name": "AMAZON.HelpIntent",
+          "samples": [
+            "help"
+          ]
         },
         {
-            "intent": "AMAZON.StopIntent"
+          "name": "AMAZON.StopIntent",
+          "samples": [
+            "stop"
+          ]
         },
         {
-            "intent": "AMAZON.CancelIntent"
+          "name": "AMAZON.CancelIntent",
+          "samples": [
+            "cancel"
+          ]
         },
         {
-            "intent": "AMAZON.ResumeIntent"
+          "name": "AMAZON.ResumeIntent",
+          "samples": []
         },
         {
-            "intent": "AMAZON.PauseIntent"
+          "name": "AMAZON.PauseIntent",
+          "samples": []
         }
-    ]
+      ],
+      "types": [
+        {
+          "name": "REGION",
+          "values": [
+            {
+              "name": {
+                "value": "Bornholm"
+              }
+            },
+            {
+              "name": {
+                "value": "Esbjerg"
+              }
+            },
+            {
+              "name": {
+                "value": "Funen"
+              }
+            },
+            {
+              "name": {
+                "value": "Copenhagen"
+              }
+            },
+            {
+              "name": {
+                "value": "Midt West"
+              }
+            },
+            {
+              "name": {
+                "value": "North"
+              }
+            },
+            {
+              "name": {
+                "value": "North Jutland"
+              }
+            },
+            {
+              "name": {
+                "value": "Northern Jutland"
+              }
+            },
+            {
+              "name": {
+                "value": "Zealand"
+              }
+            },
+            {
+              "name": {
+                "value": "South"
+              }
+            },
+            {
+              "name": {
+                "value": "Triangle Area"
+              }
+            },
+            {
+              "name": {
+                "value": "Tri Area"
+              }
+            },
+            {
+              "name": {
+                "value": "Tri City"
+              }
+            },
+            {
+              "name": {
+                "value": "East"
+              }
+            },
+            {
+              "name": {
+                "value": "East Jutland"
+              }
+            },
+            {
+              "name": {
+                "value": "Eastern Jutland"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
 }

@@ -36,27 +36,26 @@ repositories {
 
 dependencies {
     // Groovy
-    compile 'org.codehaus.groovy:groovy:2.4.12'
+    compile 'org.codehaus.groovy:groovy:2.4.15'
     // AWS Lambda
-    compile 'com.amazonaws:aws-lambda-java-core:1.2.0'
-    compile 'com.amazonaws:aws-lambda-java-events:1.2.0'
+//    compile 'com.amazonaws:aws-lambda-java-core:1.2.0'
+//    compile 'com.amazonaws:aws-lambda-java-events:1.2.0'
     compile 'com.amazon.alexa:ask-sdk:2.9.0'
-    compile 'org.slf4j:slf4j-api:1.7.10'
-    compile 'org.apache.commons:commons-lang3:3.3.2'
-    compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
-    compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
-    compile 'net.sf.json-lib:json-lib:2.4:jdk15'
-    compile 'org.slf4j:jul-to-slf4j:1.7.19'
-    compile 'org.slf4j:slf4j-api:1.7.19'
-    compile 'ch.qos.logback:logback-classic:1.0.13'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version: '1.11.3'
+//    compile 'org.apache.commons:commons-lang3:3.3.2'
+//    compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+//    compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+//    compile 'net.sf.json-lib:json-lib:2.4:jdk15'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'org.slf4j:jul-to-slf4j:1.7.25'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+    compile 'ch.qos.logback:logback-core:1.2.3'
 
     // Use the awesome Spock testing and specification framework
     testCompile 'org.spockframework:spock-core:1.2-groovy-2.4'
 }
 
 task buildZip(type: Zip) {
-    from compileJava
+    from compileGroovy
     from processResources
     into('lib') {
         from configurations.runtime
@@ -96,6 +95,6 @@ task runMain() {
 }
 
 shadowJar {
-    baseName = 'radio-fat'
+    baseName = project.name + '-fat'
     classifier = null
 }

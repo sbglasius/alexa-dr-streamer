@@ -18,6 +18,7 @@ class SessionEndedRequestHandler implements RadioRequestHandler {
     @Override
     Optional<Response> handle(HandlerInput input) {
         log.debug("Session ended")
+        cancelPlayer(input)
         return input.getResponseBuilder().build()
     }
 }

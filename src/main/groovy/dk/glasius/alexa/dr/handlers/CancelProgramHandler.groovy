@@ -16,6 +16,6 @@ class CancelProgramHandler implements RadioRequestHandler {
     @Override
     Optional<Response> handle(HandlerInput input) {
         log.debug("Cancel intent")
-        say input, "Stopping Denmark's Radio. GoodBye."
+        cancelPlayer(input, "Stopping Denmark's Radio. GoodBye.", true)
     }
 }

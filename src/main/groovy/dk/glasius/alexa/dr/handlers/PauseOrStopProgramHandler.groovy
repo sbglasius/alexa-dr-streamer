@@ -15,6 +15,6 @@ class PauseOrStopProgramHandler implements RadioRequestHandler {
 
     @Override
     Optional<Response> handle(HandlerInput input) {
-        say input, "Pausing Denmark's Radio. Say 'resume' to continue."
+        cancelPlayer input, "Pausing Denmark's Radio. Say 'resume' to continue.", false
     }
 }

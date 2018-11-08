@@ -8,8 +8,10 @@ import com.amazon.ask.model.IntentRequest
 import com.amazon.ask.model.Request
 import com.amazon.ask.model.Response
 import com.amazon.ask.model.Slot
+import com.amazon.ask.model.interfaces.audioplayer.ClearBehavior
 import com.amazon.ask.model.interfaces.audioplayer.PlayBehavior
 import com.amazon.ask.request.Predicates
+import com.amazon.ask.response.ResponseBuilder
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -42,6 +44,17 @@ trait RadioRequestHandler implements RequestHandler {
                 .withSimpleCard("Denmark's Radio", speechText)
                 .build()
     }
+    Optional<Response> cancelPlayer(HandlerInput input, String speechText = null, boolean shouldEndSession = true) {
+        ResponseBuilder builder = input.getResponseBuilder()
+                .addAudioPlayerClearQueueDirective(ClearBehavior.CLEAR_ALL)
+                .addAudioPlayerStopDirective()
+                if(speechText) {
+                    builder = builder
+                            .withSpeech(speechText)
+                            .withSimpleCard("Denmark's Radio", speechText)
+                }
+                builder.build()
+    }
 
     String getRequestId(HandlerInput input) {
         input.request.requestId
@@ -64,7 +77,8 @@ trait RadioRequestHandler implements RequestHandler {
     }
 
     void setSessionAttribute(HandlerInput input, String key, Object value) {
-        getAttributesManager(input).setSessionAttributes(Collections.singletonMap(key, value))
+        Map<String, Object> attributes = getAttributesManager(input).sessionAttributes
+        attributes[key] = value
     }
 
     Object getSessionAttribute(HandlerInput input, String key) {

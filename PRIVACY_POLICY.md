@@ -3,7 +3,7 @@ Privacy Policy
 
 Last Updated: August 6, 2017
 
-*Denmark's Radio Unoficial Alexa Skill* (the skill) and it's owner and devloper (the owner) is committed to your privacy. The owner and developer, Søren Berg Glasius is not interested in your data!
+*Denmark's Radio Unofficial Alexa Skill* (the skill) and it's owner and developer (the owner) is committed to your privacy. The owner and developer, Søren Berg Glasius is not interested in your data!
 
 Collection of Information
 -----
@@ -19,7 +19,7 @@ Since no data is collected, no information is shared with anyone.
 
 Online Advertisements
 -----
-*The owner* does not do any advertisment to you or your device.
+*The owner* does not do any advertisements to you or your device.
 
 User Agreement
 -----

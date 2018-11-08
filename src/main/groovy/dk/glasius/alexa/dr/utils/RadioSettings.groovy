@@ -11,7 +11,7 @@ class RadioSettings {
     static Properties getStationList() {
         final Properties properties = new Properties()
         try {
-            InputStream stream = RadioSettings.getResourceAsStream("/radiostations.properties")
+            InputStream stream = RadioSettings.getResourceAsStream("/radio-stations.properties")
             properties.load(stream)
         } catch (ignored) {
             log.error("Unable to aws application id. Please set up a speechlet.properties")

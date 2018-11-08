@@ -10,7 +10,7 @@ class RadioSettingsSpec extends Specification {
         then:
             noExceptionThrown()
             stationList.size() == 36
-            stationList.'news.name' == 'the News and Sports loop from Denmarks Radio'
+            stationList.'news.name' == "the News and Sports loop from Denmark's Radio"
     }
 }
 

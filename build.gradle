@@ -38,12 +38,9 @@ dependencies {
     // Groovy
     compile 'org.codehaus.groovy:groovy:2.4.12'
     // AWS Lambda
-    compile 'com.amazonaws:aws-lambda-java-core:1.1.0'
-    compile 'com.amazonaws:aws-lambda-java-events:1.1.0'
-    // AWS Dynamodb AWS
-    compile "com.amazonaws:aws-java-sdk-dynamodb:1.10.34"
-    /// Alexa Skills Kit
-    compile 'com.amazon.alexa:alexa-skills-kit-java:1.1.7_SNAPSHOT'
+    compile 'com.amazonaws:aws-lambda-java-core:1.2.0'
+    compile 'com.amazonaws:aws-lambda-java-events:1.2.0'
+    compile 'com.amazon.alexa:ask-sdk:2.9.0'
     compile 'org.slf4j:slf4j-api:1.7.10'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
@@ -55,9 +52,7 @@ dependencies {
     compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version: '1.11.3'
 
     // Use the awesome Spock testing and specification framework
-    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-    testCompile 'junit:junit:4.12'
-
+    testCompile 'org.spockframework:spock-core:1.2-groovy-2.4'
 }
 
 task buildZip(type: Zip) {
@@ -79,7 +74,7 @@ aws {
 
 task deploy(type: AWSLambdaMigrateFunctionTask, dependsOn: build) {
     functionName = "RadioSkill"
-    handler = "dk.glasius.alexa.dr.RadioSpeechletRequestStreamHandler"
+    handler = "dk.glasius.alexa.dr.RadioStreamHandler"
     role = "arn:aws:iam::${aws.accountId}:role/service-role/radioPlayer"
     runtime = Runtime.Java8
     zipFile = buildZip.archivePath

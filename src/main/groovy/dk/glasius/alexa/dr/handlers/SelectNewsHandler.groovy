@@ -22,8 +22,7 @@ class SelectNewsHandler implements RadioRequestHandler {
 
         String programName = stationList.getProperty("news.name")
         String streamUrl = stationList.getProperty("news.url")
-
-        String streamToken = (getRequestId(input) + streamUrl).hashCode()
+        String streamToken = getRequestId(input) + streamUrl
 
         setSessionAttribute(input, PROGRAM_NAME, programName)
         setSessionAttribute(input, STREAM_URL, streamUrl)

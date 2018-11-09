@@ -7,10 +7,10 @@ import groovy.util.logging.Slf4j
 
 @Slf4j
 @CompileStatic
-class PauseOrStopProgramHandler implements RadioRequestHandler {
+class PauseProgramHandler implements RadioRequestHandler {
     @Override
     boolean canHandle(HandlerInput input) {
-        return matches(input, "AMAZON.PauseIntent", "AMAZON.StopIntent")
+        return matches(input, "AMAZON.PauseIntent")
     }
 
     @Override

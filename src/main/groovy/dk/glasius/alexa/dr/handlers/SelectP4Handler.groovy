@@ -58,7 +58,7 @@ class SelectP4Handler implements RequestHandler, RadioRequestHandler {
 
         String programName = stationList.getProperty("${propertyName}.name")
         String streamUrl = stationList.getProperty("${propertyName}.url")
-        String streamToken = (getRequestId(input) + streamUrl).hashCode()
+        String streamToken = getRequestId(input) + streamUrl
 
         setSessionAttribute(input, PROGRAM_NAME, programName)
         setSessionAttribute(input, STREAM_URL, streamUrl)

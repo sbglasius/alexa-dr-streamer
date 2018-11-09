@@ -10,7 +10,7 @@ import groovy.util.logging.Slf4j
 class CancelProgramHandler implements RadioRequestHandler {
     @Override
     boolean canHandle(HandlerInput input) {
-        return matches(input, 'AMAZON.CancelIntent')
+        return matches(input, 'AMAZON.CancelIntent', "AMAZON.StopIntent")
     }
 
     @Override
